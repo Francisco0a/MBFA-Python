@@ -1,4 +1,5 @@
 #Python final project
+#Link to the app: https://francisco0a-undervalued-stocks-mbfa-project-main-7kfsur.streamlit.app/
 
 #Required modules for the app
 import streamlit as st
@@ -12,20 +13,21 @@ import matplotlib.pyplot as plt
 #Configuring page
 st.set_page_config(layout='wide')
 st.title('Stock Screener: Find Undervalued Stocks for Different Indexes:money_with_wings::chart:')
-st.header('Identify Undervalued Stocks for Your Portfolio')
 
+#Adding section about information regarding the app
 expander = st.expander('About this app')
-expander.markdown('''Data Science in Finance (Python) 
-* **Final project** 
-* **Members:** SALONEN, Samuli, ALVAREZ, Francisco & VIDAL, Laura
-* **References:** [Yahoo Finance](https://www.kaggle.com/code/omkaarlavangare/content-based-recommendation/notebook),
-    [Streamlit library](https://docs.streamlit.io/library/api-reference):''')
+expander.markdown('''The present app can help investors in looking for undervalued stocks from the world, thanks to different indexes, and ratios used for the analysis.
+* **Final project Data Science in Finance ** 
+* **Members of the team:** SALONEN, Samuli, ALVAREZ, Francisco & VIDAL, Laura
+* **References:** [Yahoo Finance](https://finance.yahoo.com),
+    [Streamlit library](https://docs.streamlit.io/library/api-reference),
+    [Datacamp for finance](https://app.datacamp.com/learn/courses/bond-valuation-and-analysis-in-python),
+    [Data Cleaning](https://www.kaggle.com/learn/data-cleaning),:''')
 
-st.subheader('Choose the index of your preference in order to get its individual undervalued stocks.')
+st.header('Identify Undervalued Stocks for Your Portfolio')
 st.caption('Disclaimer: This is not an investment advice, but it is a useful tool to make informed decisions for potentially undervalued stocks')
 
 #Function to import yahoo data using the unofficial api
-
 def get_stock_data(tickers):
     data = Ticker(tickers).get_modules('assetProfile price summaryDetail defaultKeyStatistics') 
     #assetProfile : industry , price : longName & regularMarketPrice , summaryDetail : twoHundredDayAverage , 
@@ -62,7 +64,6 @@ csi300 = [item + '.SS' for item in csi300]
 stoxx600 = pd.DataFrame(columns=['Ticker', 'Exchange'])
 
 #Getting tickets from Dividendmax
-        #why is it 20
 for i in range(1, 20):
     url = 'https://www.dividendmax.com/market-index-constituents/stoxx600.html/?page=' + str(i)
     data = pd.read_html(url)[0][['Ticker', 'Exchange']]
@@ -103,14 +104,14 @@ for i in range(0, len(stoxx600)):
         stoxx600.iloc[i] = stoxx600.iloc[i] + '.AT'
     elif 'Helsinki' in stoxx600.iloc[i]['Exchange']:
         stoxx600.iloc[i] = stoxx600.iloc[i] + '.HE'
-
+        
+#Manipulating the data
 stoxx600 = stoxx600['Ticker'].to_list()
 stoxx600 = [x.replace('..', '.') for x in stoxx600]
 stoxx600 = [x.replace(' ', '-') for x in stoxx600]
 stoxx600 = [x.replace('.', '-', 1) if x.count('.')==2 else x for x in stoxx600]
 
-#Creating Dataframe with all the tickers
-
+#Creating Dataframe with the tickers that we have
 list_of_tickers = st.selectbox('Choose investment universe.', 
                                ['Standard and Poors 500', 
                                 'STOXX Europe 600', 
@@ -139,8 +140,7 @@ elif list_of_tickers == 'ALL':
 dict_full = get_stock_data(list_of_tickers)
 
 #Deleting stocks that have no data 
-#sidenote: we are losing some tickers because the STOXX600 website is a bit old, 
-#some stocks have changed exchanges etc.
+#sidenote: we are losing some tickers because the STOXX600 website is a bit old, but for the others should be ok.
 
 delete = []
 for i in dict_full.keys():
@@ -159,11 +159,8 @@ for key in dict_full.keys():
             pass
         
 #Getting ratio for the analysis
-
 ratios = ['PE', 'Beta', 'PB', 'EPS', 'PEG', 'EVR', 'EV/EBITDA']
-
 ratio = st.selectbox('Choose wanted ratio.', ratios)
-
 if ratio == 'PE':
     ratio = 'forwardPE'
 elif ratio == 'Beta':
@@ -179,9 +176,7 @@ elif ratio == 'EVR':
 elif ratio == 'EV/EBITDA':
     ratio = 'enterpriseToEbitda'
 
-
 #Creatingthe data frame to start the analysis
-
 df = pd.DataFrame.from_dict({(i,j): dict_full[i][j] 
                            for i in dict_full.keys() 
                            for j in dict_full[i].keys()},
@@ -201,11 +196,9 @@ def is_outlier(s):
     upper_limit = s.mean() + (s.std() * 2)
     return ~s.between(lower_limit, upper_limit)
 
-
 df = df[~df.groupby('industry', group_keys=False)[ratio].apply(is_outlier)]
 
 #Creating industry rankings
-
 df['industry_' + ratio] = df[ratio].groupby(df['industry']).transform('mean')
 df['disc_' + ratio] = df[ratio] / df['industry_' + ratio] - 1
 
@@ -213,27 +206,22 @@ df['disc_' + ratio] = df[ratio] / df['industry_' + ratio] - 1
 df_uv = df.loc[df.groupby('industry')['disc_' + ratio].idxmin()]
 df_uv.sort_values(by='disc_' + ratio, ascending=True, inplace=True)
 
+st.header('Undervalued stocks from the index chosen')
 df_uv
 
-#Creating a pie chart to show how much money would be necessary to buy all the undervalued stocks, with currency
+#Creating a bar chart to show how much money would be necessary to buy all the undervalued stocks, with currency.
 sum_curr = df_uv.groupby('currency')['regularMarketPrice'].sum()
-
 labels = sum_curr.index
 values = sum_curr.values
-
 fig, ax = plt.subplots()
-
 ax.bar(labels, values)
 ax.set_xlabel('Currency')
 ax.set_ylabel('Total Value')
-ax.set_title('Money needed to buy every stock that is undervalued')
-
 for i, v in enumerate(values):
     ax.text(i, v, f'{v:.2f}', ha='center', va='bottom')
-
-#Rotate the x-axis labels if needed
 plt.xticks(rotation=45)
 
 #Display the bar chart in Streamlit app
+st.header('If you bought every stock that was undervalued... How much money would you need?')
 st.pyplot(fig)
 

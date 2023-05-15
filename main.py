@@ -16,7 +16,7 @@ st.title('Stock Screener: Find Undervalued Stocks for Different Indexes:money_wi
 
 #Adding section about information regarding the app
 expander = st.expander('About this app')
-expander.markdown('''The present app can help investors in looking for undervalued stocks from the world, thanks to different indexes, and ratios used for the analysis.
+expander.markdown('''The present app can help investors in looking for undervalued stocks from the world, thanks to different indexes, and ratios used for the analysis in real time.
 * **Final project for the course of Data Science in Finance**
 * **Université Paris 1, Pantheón-Sorbonne, PSME and MBFA** 
 * **Members of the team:** SALONEN, Samuli, ALVAREZ, Francisco & VIDAL, Laura

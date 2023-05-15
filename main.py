@@ -5,6 +5,7 @@ import streamlit as st
 import pandas as pd
 pd.options.mode.chained_assignment = None
 import numpy as np
+import yahooquery as yh
 from yahooquery import Ticker
 import matplotlib.pyplot as plt
 

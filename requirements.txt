@@ -1,4 +1,4 @@
 yahooquery
 pandas 
 numpy 
-matplotlib.pyplot
+matplotlib

@@ -1,1 +1,4 @@
 yahooquery
+pandas 
+numpy 
+matplotlib.pyplot

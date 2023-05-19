@@ -16,7 +16,9 @@ st.title('Stock Screener: Find Undervalued Stocks for Different Indexes:money_wi
 
 #Adding section about information regarding the app
 expander = st.expander('About this app')
-expander.markdown('''The present app can help investors in looking for undervalued stocks from the world, thanks to different indexes, and ratios used for the analysis in real time.
+expander.markdown('''This app helps investors to identify undervalued stocks from various indexes by utilizing financial ratios and real-time data from Yahoo Finance. Users can choose from different investment universes, including the S&P 500, STOXX Europe 600, Tel Aviv 125, Cotation Assistée en Continu 40, NZSX 50 Index, China CSI 300 Index, or selecting all the stocks. 
+After importing the data, the app performs data cleaning and manipulation, filtering out stocks with incomplete or missing data. It retrieves essential financial ratios like PE ratio, Beta, PB ratio, EPS, PEG ratio, EVR ratio, and EV/EBITDA ratio.
+The app then applies industry rankings and identifies undervalued stocks based on the selected ratio. Outliers are removed, and the undervalued stocks are sorted and displayed. 
 * **Final project for the course of Data Science in Finance**
 * **Université Paris 1, Pantheón-Sorbonne, PSME and MBFA** 
 * **Members of the team:** SALONEN, Samuli, ALVAREZ, Francisco & VIDAL, Laura

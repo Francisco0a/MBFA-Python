@@ -25,7 +25,7 @@ The app then applies industry rankings and identifies undervalued stocks based o
 * **References:** [Yahoo Finance](https://finance.yahoo.com),
     [Streamlit library](https://docs.streamlit.io/library/api-reference),
     [Datacamp for finance](https://app.datacamp.com/learn/courses/bond-valuation-and-analysis-in-python),
-    [Data Cleaning](https://www.kaggle.com/learn/data-cleaning),:''')
+    [Data Cleaning](https://www.kaggle.com/learn/data-cleaning)''')
 st.header('Identify Undervalued Stocks for Your Portfolio')
 st.caption('Disclaimer: This is not an investment advice, but it is a useful tool to make informed decisions for potentially undervalued stocks')
 

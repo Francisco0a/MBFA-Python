@@ -200,5 +200,7 @@ df_uv = df.loc[df.groupby('industry')['disc_' + ratio].idxmin()]
 df_uv.sort_values(by='disc_' + ratio, ascending=True, inplace=True)
 
 #Printing results from the analysis
-st.header('Undervalued stocks from the index chosen')
-df_uv
+if st.button('Get the results'):
+    st.subheader('Undervalued stocks from the index chosen')
+    st.dataframe(df_uv)
+

@@ -8,7 +8,6 @@ pd.options.mode.chained_assignment = None
 import numpy as np
 import yahooquery as yh
 from yahooquery import Ticker
-import matplotlib.pyplot as plt
 
 #Configuring page
 st.set_page_config(layout='wide')

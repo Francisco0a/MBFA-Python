@@ -1,5 +1,6 @@
 #Python final project
 #Link to the app: https://francisco0a-undervalued-stocks-mbfa-project-main-7kfsur.streamlit.app/
+#Github connected to the app https://github.com/Francisco0a/Undervalued-Stocks-MBFA-Project
 
 #Required modules for the app
 import streamlit as st

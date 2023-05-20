@@ -26,11 +26,10 @@ The app then applies industry rankings and identifies undervalued stocks based o
     [Streamlit library](https://docs.streamlit.io/library/api-reference),
     [Datacamp for finance](https://app.datacamp.com/learn/courses/bond-valuation-and-analysis-in-python),
     [Data Cleaning](https://www.kaggle.com/learn/data-cleaning),:''')
-
 st.header('Identify Undervalued Stocks for Your Portfolio')
 st.caption('Disclaimer: This is not an investment advice, but it is a useful tool to make informed decisions for potentially undervalued stocks')
 
-#Function to import yahoo data using the unofficial api
+#Function to import yahoo data using the unofficial API
 @st.cache_data
 def get_stock_data(tickers):
     data = Ticker(tickers).get_modules('assetProfile price summaryDetail defaultKeyStatistics') 
@@ -40,6 +39,7 @@ def get_stock_data(tickers):
 
 index_list = ['sp500', 'ta125', 'cac40', 'csi300', 'stoxx600']
 
+#Data download from different sources and manipulation to make it a list
 @st.cache_data
 def get_index_constituents(index):
     if index == 'sp500':
@@ -169,7 +169,7 @@ elif ratio == 'EVR':
 elif ratio == 'EV/EBITDA':
     ratio = 'enterpriseToEbitda'
 
-#Creatingthe data frame to start the analysis
+#Creating the data frame to start the analysis
 df = pd.DataFrame.from_dict({(i,j): dict_full[i][j] 
                            for i in dict_full.keys() 
                            for j in dict_full[i].keys()},
@@ -199,5 +199,6 @@ df['disc_' + ratio] = df[ratio] / df['industry_' + ratio] - 1
 df_uv = df.loc[df.groupby('industry')['disc_' + ratio].idxmin()]
 df_uv.sort_values(by='disc_' + ratio, ascending=True, inplace=True)
 
+#Printing results from the analysis
 st.header('Undervalued stocks from the index chosen')
 df_uv
